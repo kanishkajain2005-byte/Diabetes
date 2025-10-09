@@ -14,26 +14,27 @@ import pandas as pd
 loaded_model = pickle.load(open('trained_model.sav', 'rb'))
 loaded_scaler = pickle.load(open('scaler.pkl', 'rb'))
 
-def diabetes_prediction(input_data):
-    input_data = pd.DataFrame([input_data], columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction'])
-    # now scaling the input taken.
-    mean = input_data.mean()
-    std_dev = input_data.std()
-    return (input_data - mean) / std_dev
-    scaled_input_data = loaded_scaler.fit_transform(input_data)
-    # now converting the input into a array.
-    scaled_input_data_as_numpy_array = np.asarray(scaled_input_data)
-    # reshaping the array.
-    scaled_input_data_reshaped = scaled_input_data_as_numpy_array.reshape(1,-1)
-    # now predicting.
-    prediction = loaded_model.predict(scaled_input_data_reshaped)
-    # putting the condition for prediction.
-    print(prediction)
-    if (prediction[0] == 0):
-         return ('The person is not diabetic')
-       
+def diabetes_prediction(input_data_list):
+    # Create a DataFrame from the input list
+    input_data_data = pd.DataFrame([input_data_list], columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction'])
+    
+    # Scale the input data using the pre-trained scaler
+    scaled_input_data = loaded_scaler.transform(input_data_data)
+    
+    # Convert scaled data to a NumPy array for prediction
+    scaled_input_data_as_numpy_array = scaled_input_data.to_numpy()
+    
+    # Reshape the array
+    input_data_reshaped = scaled_input_data_as_numpy_array.reshape(1, -1)
+    
+    # Get the prediction
+    prediction = loaded_model.predict(input_data_reshaped)
+    
+    # Return the result
+    if prediction[0] == 0:
+        return 'The person is not diabetic'
     else:
-         return ('The person is diabetic')
+        return 'The person is diabetic'
 
 
 def main():
