@@ -16,10 +16,10 @@ loaded_scaler = pickle.load(open('scaler.pkl', 'rb'))
 
 def diabetes_prediction(input_data_list):
     # Create a DataFrame from the input list
-    input_data_data = pd.DataFrame([input_data_list], columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction'])
+    input_data_list = pd.DataFrame([input_data_list], columns=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction'])
     
     # Scale the input data using the pre-trained scaler
-    scaled_input_data = loaded_scaler.transform(input_data_data)
+    scaled_input_data = loaded_scaler.transform(input_data_list)
     
     # Convert scaled data to a NumPy array for prediction
     scaled_input_data_as_numpy_array = scaled_input_data.to_numpy()
